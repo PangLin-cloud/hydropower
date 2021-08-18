@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Tables</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="assets/css/main.css">
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<link rel="stylesheet" href="assets/css/demo.css">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default navbar-fixed-top" th:replace="index :: #nav"></nav>
+		<!-- END NAVBAR -->
+		<!-- LEFT SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar" th:replace="index :: #sidebar-nav"></div>
+		<!-- END LEFT SIDEBAR -->
+		<!-- MAIN -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<h3 class="page-title">未缴费列表</h3>
+					<div class="row">
+						<div class="col-md-12">
+							<!-- BASIC TABLE -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">所有未缴费订单</h3>
+								</div>
+								<div class="panel-body">
+									<table class="table">
+										<thead>
+											<tr>
+												<th>用户姓名</th>
+												<th>用户住址</th>
+												<th>联系方式</th>
+												<th>金额</th>
+												<th>创建时间</th>
+												<th>缴费时间</th>
+												<th>订单创建者</th>
+												<th>订单状态</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr th:each="order:${orderByStateList}">
+												<!--/*@thymesVar id="order" type="com.panglin.pojo.Order"*/-->
+												<td th:text="${order.user.username}"></td>
+												<td th:text="${order.user.bName}+${order.user.uName}+${order.user.mName}"></td>
+												<td th:text="${order.user.phone}"></td>
+												<td th:text="${order.price}"></td>
+												<td th:text="${order.createTimeString}"></td>
+												<td th:text="${order.payTimeString}"></td>
+												<td th:text="${adminStringMap.get(order.payAdminId)}"></td>
+												<td th:text="${order.orderStateString}"></td>
+												<td>
+													<button type="button" class="btn btn-info pwd-upd-btn" onclick="upd_pwd(this)" th:attr="updPwdId=${order.id}">缴费</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<!-- END BASIC TABLE -->
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+		</div>
+		<!-- END MAIN -->
+		<div class="clearfix"></div>
+		<footer>
+			<div class="container-fluid">
+				<p class="copyright">Copyright &copy; 2017.Company name All rights reserved.</p>
+			</div>
+		</footer>
+	</div>
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="assets/vendor/jquery/jquery.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="assets/scripts/klorofil-common.js"></script>
+</body>
+	<script type="text/javascript">
+		// 缴费
+		function upd_pwd(result){
+			var orderid=$(result).attr('updPwdId');
+			var date=confirm("确定缴费吗？");
+			if (date) {
+				$.ajax({
+					url: '/payWater?id=' + orderid,
+					type: 'post',
+					'success': function (result) {
+						alert(result.msg);
+						location.href = "/water.action";
+					}
+				})
+			}
+		}
+	</script>
+</html>

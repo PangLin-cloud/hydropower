@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<title>Tables</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<!-- VENDOR CSS -->
+	<link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css">
+	<link rel="stylesheet" href="assets/vendor/linearicons/style.css">
+	<!-- MAIN CSS -->
+	<link rel="stylesheet" href="assets/css/main.css">
+	<!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
+	<link rel="stylesheet" href="assets/css/demo.css">
+	<!-- GOOGLE FONTS -->
+	<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700" rel="stylesheet">
+	<!-- ICONS -->
+	<link rel="apple-touch-icon" sizes="76x76" href="assets/img/apple-icon.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="assets/img/favicon.png">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+</head>
+
+<body>
+	<!-- WRAPPER -->
+	<div id="wrapper">
+		<!-- NAVBAR -->
+		<nav class="navbar navbar-default navbar-fixed-top" th:replace="user_index :: #nav"></nav>
+		<!-- END NAVBAR -->
+		<!-- LEFT SIDEBAR -->
+		<div id="sidebar-nav" class="sidebar" th:replace="user_index :: #sidebar-nav"></div>
+		<!-- END LEFT SIDEBAR -->
+		<!-- MAIN -->
+		<div class="main">
+			<!-- MAIN CONTENT -->
+			<div class="main-content">
+				<div class="container-fluid">
+					<h3 class="page-title">个人信息</h3>
+					<div class="row">
+						<div class="col-md-12">
+							<!-- INPUTS -->
+							<div class="panel">
+								<div class="panel-heading">
+									<h3 class="panel-title">修改个人信息</h3>
+								</div>
+								<form action="/userUpdS" method="post">
+								<div class="panel-body">
+									<input type="hidden" name="id" th:value="${users.id}">
+									<p>姓名：</p>
+									<div class="input-group">
+										<span class="input-group-addon"><i class="bi bi-person-circle"></i></span>
+										<input name="username" disabled class="form-control" th:value="${users.username}" placeholder="姓名" type="text">
+									</div>
+									<br>
+									<p>性别：</p>
+									<div class="input-group">
+										<span class="input-group-addon"><i class="bi bi-gender-ambiguous"></i></span>
+										<input class="form-control" name="sex" th:value="${users.sex}" placeholder="性别" type="text">
+									</div>
+									<br>
+									<p>年龄：</p>
+									<div class="input-group">
+										<span class="input-group-addon"><i class="bi bi-circle-fill"></i></span>
+										<input class="form-control" name="age" th:value="${users.age}" placeholder="年龄" type="text">
+									</div>
+									<br>
+									<p>密码：</p>
+									<div class="input-group">
+										<span class="input-group-addon"><i class="bi bi-telephone"></i></span>
+										<input class="form-control" name="password" th:value="${users.password}" placeholder="密码" type="text">
+									</div>
+									<br>
+									<p>手机号：<span style="color: red">(这是你的登录凭证，请谨慎修改！)</span></p>
+									<div class="input-group">
+										<span class="input-group-addon"><i class="bi bi-telephone"></i></span>
+										<input class="form-control" name="phone" th:value="${users.phone}" placeholder="手机号" type="text">
+									</div>
+									<br>
+									<p>余额：</p>
+									<div class="input-group">
+										<span class="input-group-addon"><i class="bi bi-currency-yen"></i></span>
+										<input disabled class="form-control" th:value="${users.money}" name="money" placeholder="余额" type="text">
+									</div>
+									<br>
+									<p>身份证号：</p>
+									<div class="input-group">
+										<span class="input-group-addon"><i class="bi bi-wallet2"></i></span>
+										<input disabled class="form-control" th:value="${users.idCard}" name="idCard" placeholder="身份证号" type="text">
+									</div>
+									<br>
+									<div>
+										楼号：
+										<select disabled class="form-control" name="bName">
+											<!--/*@thymesVar id="building" type="com.panglin.pojo.Building"*/-->
+											<option th:each="building:${buildingList}" th:selected="${users.bName==building.bName}" th:value="${building.bName}" th:text="${building.bName}"></option>
+										</select>
+										<br>
+										单元号：
+										<select disabled class="form-control" name="uName">
+											<!--/*@thymesVar id="unit" type="com.panglin.pojo.Unit"*/-->
+											<option th:each="unit:${unitList}" th:selected="${users.uName==unit.uName}" th:value="${unit.uName}" th:text="${unit.uName}"></option>
+										</select>
+										<br>
+										门牌号：
+										<div disabled class="input-group">
+											<span class="input-group-addon"><i class="bi bi-wallet2"></i></span>
+											<input class="form-control" name="mName" disabled th:value="${users.mName}" placeholder="Username" type="text">
+										</div>
+										<p class="demo-button">
+											<button type="submit" class="btn btn-primary btn-lg">确认修改</button>
+										</p>
+									</div>
+								</div>
+								</form>
+							</div>
+							<!-- END INPUTS -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- END MAIN CONTENT -->
+		</div>
+		<!-- END MAIN -->
+		<div class="clearfix"></div>
+		<footer>
+			<div class="container-fluid">
+				<p class="copyright">Copyright &copy; 2017.Company name All rights reserved.</p>
+			</div>
+		</footer>
+	</div>
+	<!-- END WRAPPER -->
+	<!-- Javascript -->
+	<script src="assets/vendor/jquery/jquery.min.js"></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="assets/vendor/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script src="assets/scripts/klorofil-common.js"></script>
+</body>
+
+</html>

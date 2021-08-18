@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.panglin.mapper.OrderMapper" >
+  <resultMap id="BaseResultMap" type="com.panglin.pojo.Order" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="create_time_string" property="createTimeString" jdbcType="VARCHAR" />
+    <result column="pay_time_string" property="payTimeString" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="u_id" property="uId" jdbcType="INTEGER" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="order_state_string" property="orderStateString" jdbcType="VARCHAR" />
+    <result column="pay_admin_id" property="payAdminId" jdbcType="INTEGER" />
+    <result column="water_or_electricity" property="waterOrElectricity" jdbcType="INTEGER" />
+    <result column="water_or_electricity_string" property="waterOrElectricityString" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="BaseResultMapWithUser" type="com.panglin.pojo.Order" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="pay_time" property="payTime" jdbcType="TIMESTAMP" />
+    <result column="create_time_string" property="createTimeString" jdbcType="VARCHAR" />
+    <result column="pay_time_string" property="payTimeString" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DOUBLE" />
+    <result column="u_id" property="uId" jdbcType="INTEGER" />
+    <result column="order_state" property="orderState" jdbcType="INTEGER" />
+    <result column="order_state_string" property="orderStateString" jdbcType="VARCHAR" />
+    <result column="pay_admin_id" property="payAdminId" jdbcType="INTEGER" />
+    <result column="water_or_electricity" property="waterOrElectricity" jdbcType="INTEGER" />
+    <result column="water_or_electricity_string" property="waterOrElectricityString" jdbcType="VARCHAR" />
+    <association property="user" javaType="com.panglin.pojo.TbUser">
+      <id column="id" jdbcType="INTEGER" property="id" />
+      <result column="username" jdbcType="VARCHAR" property="username" />
+      <result column="password" jdbcType="VARCHAR" property="password" />
+      <result column="sex" jdbcType="VARCHAR" property="sex" />
+      <result column="age" jdbcType="INTEGER" property="age" />
+      <result column="user_or_admin" jdbcType="INTEGER" property="userOrAdmin" />
+      <result column="phone" jdbcType="BIGINT" property="phone" />
+      <result column="id_card" jdbcType="BIGINT" property="idCard" />
+      <result column="money" jdbcType="DOUBLE" property="money" />
+      <result column="b_name" jdbcType="VARCHAR" property="bName" />
+      <result column="u_name" jdbcType="VARCHAR" property="uName" />
+      <result column="m_name" jdbcType="VARCHAR" property="mName" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, create_time, pay_time, create_time_string, pay_time_string, price, u_id, order_state, 
+    order_state_string, pay_admin_id, water_or_electricity, water_or_electricity_string
+  </sql>
+  <sql id="Base_Column_ListWithUser" >
+    o.id,o.create_time,o.pay_time,o.create_time_string,o.pay_time_string,o.price,o.u_id,o.order_state,o.order_state_string,o.pay_admin_id,o.water_or_electricity,o.water_or_electricity_string,u.id,u.username,u.password,u.sex,u.age,u.user_or_admin,u.phone,u.id_card,u.money,u.b_name,u.u_name,u.m_name
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.panglin.pojo.OrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from `order`
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExampleWithUser" resultMap="BaseResultMapWithUser" parameterType="com.panglin.pojo.OrderExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_ListWithUser" />
+    from `order` o
+    left join tb_user u
+    on o.u_id=u.id
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from `order`
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from `order`
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.panglin.pojo.OrderExample" >
+    delete from `order`
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.panglin.pojo.Order" >
+    insert into `order` (id, create_time, pay_time,
+      create_time_string, pay_time_string, price, 
+      u_id, order_state, order_state_string, 
+      pay_admin_id, water_or_electricity, water_or_electricity_string
+      )
+    values (#{id,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{payTime,jdbcType=TIMESTAMP}, 
+      #{createTimeString,jdbcType=VARCHAR}, #{payTimeString,jdbcType=VARCHAR}, #{price,jdbcType=DOUBLE}, 
+      #{uId,jdbcType=INTEGER}, #{orderState,jdbcType=INTEGER}, #{orderStateString,jdbcType=VARCHAR}, 
+      #{payAdminId,jdbcType=INTEGER}, #{waterOrElectricity,jdbcType=INTEGER}, #{waterOrElectricityString,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.panglin.pojo.Order" >
+    insert into `order`
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="payTime != null" >
+        pay_time,
+      </if>
+      <if test="createTimeString != null" >
+        create_time_string,
+      </if>
+      <if test="payTimeString != null" >
+        pay_time_string,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="uId != null" >
+        u_id,
+      </if>
+      <if test="orderState != null" >
+        order_state,
+      </if>
+      <if test="orderStateString != null" >
+        order_state_string,
+      </if>
+      <if test="payAdminId != null" >
+        pay_admin_id,
+      </if>
+      <if test="waterOrElectricity != null" >
+        water_or_electricity,
+      </if>
+      <if test="waterOrElectricityString != null" >
+        water_or_electricity_string,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null" >
+        #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTimeString != null" >
+        #{createTimeString,jdbcType=VARCHAR},
+      </if>
+      <if test="payTimeString != null" >
+        #{payTimeString,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="uId != null" >
+        #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="orderState != null" >
+        #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="orderStateString != null" >
+        #{orderStateString,jdbcType=VARCHAR},
+      </if>
+      <if test="payAdminId != null" >
+        #{payAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="waterOrElectricity != null" >
+        #{waterOrElectricity,jdbcType=INTEGER},
+      </if>
+      <if test="waterOrElectricityString != null" >
+        #{waterOrElectricityString,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.panglin.pojo.OrderExample" resultType="java.lang.Integer" >
+    select count(*) from `order`
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update `order`
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.payTime != null" >
+        pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createTimeString != null" >
+        create_time_string = #{record.createTimeString,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payTimeString != null" >
+        pay_time_string = #{record.payTimeString,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DOUBLE},
+      </if>
+      <if test="record.uId != null" >
+        u_id = #{record.uId,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderState != null" >
+        order_state = #{record.orderState,jdbcType=INTEGER},
+      </if>
+      <if test="record.orderStateString != null" >
+        order_state_string = #{record.orderStateString,jdbcType=VARCHAR},
+      </if>
+      <if test="record.payAdminId != null" >
+        pay_admin_id = #{record.payAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="record.waterOrElectricity != null" >
+        water_or_electricity = #{record.waterOrElectricity,jdbcType=INTEGER},
+      </if>
+      <if test="record.waterOrElectricityString != null" >
+        water_or_electricity_string = #{record.waterOrElectricityString,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update `order`
+    set id = #{record.id,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      pay_time = #{record.payTime,jdbcType=TIMESTAMP},
+      create_time_string = #{record.createTimeString,jdbcType=VARCHAR},
+      pay_time_string = #{record.payTimeString,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DOUBLE},
+      u_id = #{record.uId,jdbcType=INTEGER},
+      order_state = #{record.orderState,jdbcType=INTEGER},
+      order_state_string = #{record.orderStateString,jdbcType=VARCHAR},
+      pay_admin_id = #{record.payAdminId,jdbcType=INTEGER},
+      water_or_electricity = #{record.waterOrElectricity,jdbcType=INTEGER},
+      water_or_electricity_string = #{record.waterOrElectricityString,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.panglin.pojo.Order" >
+    update `order`
+    <set >
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payTime != null" >
+        pay_time = #{payTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTimeString != null" >
+        create_time_string = #{createTimeString,jdbcType=VARCHAR},
+      </if>
+      <if test="payTimeString != null" >
+        pay_time_string = #{payTimeString,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DOUBLE},
+      </if>
+      <if test="uId != null" >
+        u_id = #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="orderState != null" >
+        order_state = #{orderState,jdbcType=INTEGER},
+      </if>
+      <if test="orderStateString != null" >
+        order_state_string = #{orderStateString,jdbcType=VARCHAR},
+      </if>
+      <if test="payAdminId != null" >
+        pay_admin_id = #{payAdminId,jdbcType=INTEGER},
+      </if>
+      <if test="waterOrElectricity != null" >
+        water_or_electricity = #{waterOrElectricity,jdbcType=INTEGER},
+      </if>
+      <if test="waterOrElectricityString != null" >
+        water_or_electricity_string = #{waterOrElectricityString,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.panglin.pojo.Order" >
+    update `order`
+    set create_time = #{createTime,jdbcType=TIMESTAMP},
+      pay_time = #{payTime,jdbcType=TIMESTAMP},
+      create_time_string = #{createTimeString,jdbcType=VARCHAR},
+      pay_time_string = #{payTimeString,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DOUBLE},
+      u_id = #{uId,jdbcType=INTEGER},
+      order_state = #{orderState,jdbcType=INTEGER},
+      order_state_string = #{orderStateString,jdbcType=VARCHAR},
+      pay_admin_id = #{payAdminId,jdbcType=INTEGER},
+      water_or_electricity = #{waterOrElectricity,jdbcType=INTEGER},
+      water_or_electricity_string = #{waterOrElectricityString,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
